@@ -1,0 +1,35 @@
+
+<form ng-submit="passwordLogin()" ng-show="showLoginForm">
+  <div class="form-group">
+    <label for="username">E-mail</label>
+    <input type="email" ng-model="loginData.email"class="form-control" id="username">
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" ng-model="loginData.password" class="form-control" id="password">
+  </div>
+  <button type="submit" class="btn btn-default">Sign up</button>
+</form>
+
+<form ng-submit="userRegister()" ng-hide="showLoginForm">
+  <div class="form-group">
+    <label for="firstname">First Name</label>
+    <input type="text" ng-model="registerData.user.first_name" id="firstname">
+  </div>
+  <div class="form-group">
+    <label for="lastname">Last Name</label>
+    <input type="text" ng-model="registerData.user.last_name" id="lastname">
+  </div>
+  <div class="form-group">
+    <label for="email_reg">E-mail</label>
+    <input type="email" ng-model="registerData.email" id="email_reg">
+  </div>  
+  <div class="form-group">
+    <label for="password_reg">Password</label>
+    <input type="password" ng-model="registerData.password" id="password_reg">
+  </div>    
+  <div class="form-group">  
+    <button type="submit" class="btn btn-default">Register</button>
+  </div>
+  <button class="button button-block button-clear button-positive" type="button" ng-click="showLoginForm = true"> Go to login </button>  
+</form>
