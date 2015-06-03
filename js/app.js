@@ -24,11 +24,16 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: 'templates/layout.html',
                 controller: 'BaseController'
             })
-            .state('app.video', {
-                url: "/video",
-                templateUrl: 'templates/video.html',
-                controller: 'VideoController'
-            })              
+            .state('app.receive_call', {
+                url: "/receive",
+                templateUrl: 'templates/get_call.html',
+                controller: 'IncomingCallController'
+            })     
+            .state('app.call', {
+                url: "/call",
+                templateUrl: 'templates/call.html',
+                controller: 'CallController'
+            }) 
     //         .state('logout', {
     //             url: "/logout",
     //             controller: 'LogoutController'
@@ -70,7 +75,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
 
 myApp.run(function ($rootScope, $state, $location, SecurityAuthFactory) {    
 
-    //SecurityAuthFactory.authObj().$unauth();
+    // SecurityAuthFactory.authObj().$unauth();
     
     SecurityAuthFactory.authObj().$onAuth(function(authData) {
         if(!authData){

@@ -142,14 +142,16 @@ angular.module('Controllers', ['Security', 'Kandy'])
       console.log(call.getId()); 
       $scope.call_id = call.getId();        
 
-      $state.go('app.incoming_call');
+      $state.go('app.receive_call');
   };  
 
   var onCallAnswered = function(){
       console.log('call answered');
       $audioRingIn[0].pause();      
       $audioRingOut[0].pause();         
-  }; 
+  };
+
+  $state.go('app.call'); 
 
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
