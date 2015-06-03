@@ -16,14 +16,19 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
             .state('login', {
                 url: "/",
-                templateUrl: '/templates/login.html',
+                templateUrl: 'templates/login.html',
                 controller: 'AuthController'
             })
             .state('app', {
                 url: "/home",
-                templateUrl: '/templates/layout.html',
+                templateUrl: 'templates/layout.html',
                 controller: 'BaseController'
-            })            
+            })
+            .state('app.video', {
+                url: "/video",
+                templateUrl: 'templates/video.html',
+                controller: 'VideoController'
+            })              
     //         .state('logout', {
     //             url: "/logout",
     //             controller: 'LogoutController'
@@ -65,7 +70,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
 
 myApp.run(function ($rootScope, $state, $location, SecurityAuthFactory) {    
 
-    // SecurityAuthFactory.authObj().$unauth();
+    //SecurityAuthFactory.authObj().$unauth();
     
     SecurityAuthFactory.authObj().$onAuth(function(authData) {
         if(!authData){
