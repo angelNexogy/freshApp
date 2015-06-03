@@ -164,9 +164,8 @@ angular.module('Controllers', ['Security', 'Kandy'])
 })
 .controller('CallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
-    $audioRingOut[0].play();
-
     $scope.init_call = function(){
+      $audioRingOut[0].play();
       KandyManager.makeCall('simplelogin40@development.nexogy.com', true);
     };
 
