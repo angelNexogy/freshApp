@@ -3,5 +3,5 @@ npm-debug.log
 dist
 .tmp
 .sass-cache
-bower_components
+#bower_components
 .idea
