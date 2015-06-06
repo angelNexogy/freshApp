@@ -5,9 +5,12 @@ angular
   .constant('KANDY_DOMAIN_KEY', 'DAK7cc41019d8324a4a92db881f0987cc7b')    
   .constant('KANDY_DOMAIN_SECRET', 'DAScfff637efcd5445aa6cd9580da2072d7')      
   .constant('KANDY_API_URL', 'https://api.kandy.io/v1.2/')    
-  .factory("KandyManager", function ($rootScope, $http, KANDY_ACCOUNT_KEY, KANDY_ACCOUNT_SECRET, KANDY_API_URL, KANDY_DOMAIN_KEY, KANDY_DOMAIN_SECRET) {
+  .constant('KANDY_API_DOMAIN', '@development.nexogy.com')      
+  .factory("KandyManager", function ($rootScope, $http, KANDY_ACCOUNT_KEY, KANDY_ACCOUNT_SECRET, KANDY_API_URL, KANDY_DOMAIN_KEY, KANDY_DOMAIN_SECRET, KANDY_API_DOMAIN) {
     
     var kandyServices = {};
+
+    kandyServices.domain = KANDY_API_DOMAIN;
 
 	kandyServices.kandyUserToken = function(user_id){
 
@@ -80,7 +83,7 @@ angular
 	//   }
 	// });
 
-	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswer){
+	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswer, onPresenceNotification){
 							KandyAPI.Phone.setup({
 					          remoteVideoContainer: incomingVideo,
 					          localVideoContainer: outgoingVideo,
@@ -93,7 +96,8 @@ angular
 					            oncall: onCall,
 					            callended: onCallTerminate,	
             					callincoming: onCallIncoming,
-            					callanswered: onCallAnswer,            					
+            					callanswered: onCallAnswer,
+            					presencenotification: onPresenceNotification,            					
 							  }
 							});
 						}
@@ -112,6 +116,16 @@ angular
 
 	// kandyServices.createContact = function(successCallback){ KandyAPI.Phone.addToPersonalAddressBook(contactsObject, successCallback); }	
 	kandyServices.getDirectory = function(successCallback) { KandyAPI.Phone.searchDirectoryByUserName('', successCallback); }
+
+	kandyServices.watchPresence = function(contacts) { 
+		
+		users = [];
+	    contacts.forEach(function(contact){
+	      users.push({full_user_id: contact.full_user_id});
+	    });
+
+		KandyAPI.Phone.watchPresence(users, function(){ console.info('Watching presence.');}, function(){ console.error('Fail watching presence.');}); 
+	}
 
 	kandyServices.sendIM = function(sendTo, content, type, successCallback, failedCallback){
 

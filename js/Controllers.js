@@ -14,7 +14,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
 	};
 
   //Flag to switch between form_login and register_login
-  $scope.showLoginForm = true;
+  // $scope.showLoginForm = true;
 
   $scope.passwordLogin = function() {
     var email = $scope.loginData.email;
@@ -87,20 +87,28 @@ angular.module('Controllers', ['Security', 'Kandy'])
 	$scope.hola = 'logged';
   $scope.login = null;
   $scope.call_id = null;
+  $scope.contacts = [];
+  $scope.contacts_loader = true;
+  $scope.user = {};
+
+  $scope.logout = function(){
+      SecurityAuthFactory.authObj().$unauth();
+      KandyManager.logout();      
+  };
 
   SecurityAuthFactory.getUserAuth().then(function(data){
 
-      KandyManager.setup(null, $('#incoming-video')[0], onLoginSuccess, onLoginFailed, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswered);
-
-      // KandyManager.logout();
+      $scope.user = {username: data.kandy.user_id + KandyManager.domain, full_name: data.first_name + " " + data.last_name};
+      KandyManager.setup(null, $('#incoming-video')[0], onLoginSuccess, onLoginFailed, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswered, onPresenceNotification);
   
       KandyManager.login(data.kandy.user_id, data.kandy.password);
   });
 
   var onLoginSuccess = function(){
-      console.log('logged');
+      console.info('logged');
       $scope.login = 'logged';
 
+      KandyManager.getDirectory(onGetDirectory);
       // $state.go('app.video');
       // KandyAPI.Phone.updatePresence(0); 
       // loadAddressBook();
@@ -111,35 +119,33 @@ angular.module('Controllers', ['Security', 'Kandy'])
   };
 
   var onLoginFailed = function(){
-      console.log('log failed');
+      console.error('log failed');
   };
 
   var onCallInitiate = function(call){
-      console.log('call initiate');
-      console.log(call.getId());
+      console.info('call initiate: ' + call.getId());
 
       $scope.call_id = call.getId();
   };
 
   var onCallInitiateFail  = function(){
-      console.log('call initiate failed');
+      console.error('call initiate failed');
   };
 
   var onCall  = function(call){
-      console.log('call started');
-      console.log(call.getId()); 
+      console.info('call started: ' + call.getId());
       $scope.call_id = call.getId();
       $audioRingOut[0].pause();
   };
 
   var onCallTerminate  = function(){
-      console.log('call terminated');
+      console.info('call terminated');
       $audioRingOut[0].pause();      
   };
 
   var onCallIncoming = function(call){
-      console.log('call incoming');
-      console.log(call.getId()); 
+      console.info('call incoming: ' + call.getId());
+
       $scope.call_id = call.getId();        
 
       $state.go('app.receive_call');
@@ -151,8 +157,32 @@ angular.module('Controllers', ['Security', 'Kandy'])
       $audioRingOut[0].pause();         
   };
 
-  $state.go('app.call'); 
+  var onGetDirectory = function(data){
+    console.log(data);
 
+    data.forEach(function(contact){      
+      if(contact.full_user_id != $scope.user.username)          
+      {
+          var index = $scope.contacts.length + 1;
+          contact.id = index;
+          $scope.contacts.push(contact);
+      }
+    });
+
+    KandyManager.watchPresence(data);
+
+    $scope.contacts_loader = false;
+    $scope.$apply();   
+
+    $state.go('app.call');     
+  };
+
+  var onPresenceNotification = function(username, state, description, activity){
+    console.info(username);
+    console.info(state);
+    console.info(description);    
+    console.info(activity);    
+  }
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
