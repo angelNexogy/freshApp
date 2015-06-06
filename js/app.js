@@ -1,4 +1,4 @@
-var myApp = angular.module('sbAdminApp',
+var myApp = angular.module('starter',
         [
             'ui.router',
             'Security', 
@@ -16,24 +16,24 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
             .state('login', {
                 url: "/",
-                // templateUrl: 'templates/login.html',
-                // controller: 'AuthController'
+                templateUrl: 'templates/login.html',
+                controller: 'AuthController'
             })
-            .state('home', {
+            .state('app', {
                 url: "/home",
-                templateUrl: 'templates/call.html',
-                controller: 'HomeController'
+                templateUrl: 'templates/layout.html',
+                controller: 'BaseController'
             })
-            // .state('app.receive_call', {
-            //     url: "/receive",
-            //     templateUrl: 'templates/get_call.html',
-            //     controller: 'IncomingCallController'
-            // })     
-            // .state('app.call', {
-            //     url: "/call",
-            //     templateUrl: 'templates/call.html',
-            //     controller: 'CallController'
-            // }) 
+            .state('app.receive_call', {
+                url: "/receive",
+                templateUrl: 'templates/get_call.html',
+                controller: 'IncomingCallController'
+            })     
+            .state('app.call', {
+                url: "/call",
+                templateUrl: 'templates/call.html',
+                controller: 'CallController'
+            }) 
     //         .state('logout', {
     //             url: "/logout",
     //             controller: 'LogoutController'
@@ -76,26 +76,23 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
 myApp.run(function ($rootScope, $state, $location, SecurityAuthFactory) {    
 
     // SecurityAuthFactory.authObj().$unauth();
-    $rootScope.logged = true;    
-
+    
     SecurityAuthFactory.authObj().$onAuth(function(authData) {
         if(!authData){
-            // $state.go('login');
-            $rootScope.logged = false;
-            $state.go('login');            
+            $state.go('login');
         }
     });
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState) {
 
-        if(!SecurityAuthFactory.authObj().$getAuth() && toState.name != 'login') {
+        if(!SecurityAuthFactory.authObj().$getAuth() && toState.name !== 'login') {
             event.preventDefault();
-            // console.log('no autenticado');   
-            $state.go('login');            
+            console.log('no autenticado');
+            $state.go('login');
         }
         else if(SecurityAuthFactory.authObj().$getAuth() && toState.name == 'login'){
             event.preventDefault();
-            $state.go('home');
+            $state.go('app');
         }
     });
 });
