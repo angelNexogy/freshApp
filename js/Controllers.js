@@ -1,6 +1,6 @@
 angular.module('Controllers', ['Security', 'Kandy'])
 
-.controller('AuthController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('AuthController', function($rootScope, $scope, $state, SecurityAuthFactory, KandyManager) {
 	//User login data
 	$scope.loginData = {};
 
@@ -30,7 +30,10 @@ angular.module('Controllers', ['Security', 'Kandy'])
       password: password
     }).then(function(authData) {
 
-        $state.go('app');
+        // $state.go('app');
+        // $rootScope.logged = true;
+        // $rootScope.$apply();        
+        $state.go('home');        
 
     }).catch(function(error) {
 
@@ -82,7 +85,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
   };
 })
 
-.controller('BaseController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('HomeController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
 	$scope.hola = 'logged';
   $scope.login = null;
@@ -95,7 +98,9 @@ angular.module('Controllers', ['Security', 'Kandy'])
       SecurityAuthFactory.authObj().$unauth();
       KandyManager.logout();      
   };
-
+// })
+// .controller('HomeController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+  
   SecurityAuthFactory.getUserAuth().then(function(data){
 
       $scope.user = {username: data.kandy.user_id + KandyManager.domain, full_name: data.first_name + " " + data.last_name};
@@ -148,7 +153,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
 
       $scope.call_id = call.getId();        
 
-      $state.go('app.receive_call');
+      // $state.go('app.receive_call');
   };  
 
   var onCallAnswered = function(){
@@ -159,12 +164,11 @@ angular.module('Controllers', ['Security', 'Kandy'])
 
   var onGetDirectory = function(data){
     console.log(data);
+    // $scope.contacts = [];
 
     data.forEach(function(contact){      
       if(contact.full_user_id != $scope.user.username)          
       {
-          var index = $scope.contacts.length + 1;
-          contact.id = index;
           $scope.contacts.push(contact);
       }
     });
@@ -174,7 +178,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
     $scope.contacts_loader = false;
     $scope.$apply();   
 
-    $state.go('app.call');     
+    // $state.go('app.call');     
   };
 
   var onPresenceNotification = function(username, state, description, activity){
@@ -182,7 +186,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
     console.info(state);
     console.info(description);    
     console.info(activity);    
-  }
+  }  
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
