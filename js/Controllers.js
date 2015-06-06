@@ -1,6 +1,6 @@
 angular.module('Controllers', ['Security', 'Kandy'])
 
-.controller('AuthController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('AuthController', function($rootScope, $scope, $state, SecurityAuthFactory, KandyManager) {
 	//User login data
 	$scope.loginData = {};
 
@@ -30,7 +30,9 @@ angular.module('Controllers', ['Security', 'Kandy'])
       password: password
     }).then(function(authData) {
 
-        $state.go('app');
+        // $state.go('app');
+        $rootScope.logged = true;
+        $state.go('home');        
 
     }).catch(function(error) {
 
@@ -82,9 +84,9 @@ angular.module('Controllers', ['Security', 'Kandy'])
   };
 })
 
-.controller('BaseController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('BaseController', function($rootScope, $scope, $state, SecurityAuthFactory, KandyManager) {
 
-	$scope.hola = 'logged';
+  $scope.hola = 'logged';
   $scope.login = null;
   $scope.call_id = null;
   $scope.contacts = [];
@@ -92,23 +94,15 @@ angular.module('Controllers', ['Security', 'Kandy'])
   $scope.user = {};
 
   $scope.logout = function(){
-      SecurityAuthFactory.authObj().$unauth();
-      KandyManager.logout();      
+    SecurityAuthFactory.authObj().$unauth();
+    KandyManager.logout();      
   };
 
-  SecurityAuthFactory.getUserAuth().then(function(data){
-
-      $scope.user = {username: data.kandy.user_id + KandyManager.domain, full_name: data.first_name + " " + data.last_name};
-      KandyManager.setup(null, $('#incoming-video')[0], onLoginSuccess, onLoginFailed, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswered, onPresenceNotification);
-  
-      KandyManager.login(data.kandy.user_id, data.kandy.password);
-  });
-
-  var onLoginSuccess = function(){
+  $scope.onLoginSuccess = function(){
       console.info('logged');
       $scope.login = 'logged';
 
-      KandyManager.getDirectory(onGetDirectory);
+      KandyManager.getDirectory($scope.onGetDirectory);
       // $state.go('app.video');
       // KandyAPI.Phone.updatePresence(0); 
       // loadAddressBook();
@@ -118,32 +112,32 @@ angular.module('Controllers', ['Security', 'Kandy'])
       // }, 1000); 
   };
 
-  var onLoginFailed = function(){
+  $scope.onLoginFailed = function(){
       console.error('log failed');
   };
 
-  var onCallInitiate = function(call){
+  $scope.onCallInitiate = function(call){
       console.info('call initiate: ' + call.getId());
 
       $scope.call_id = call.getId();
   };
 
-  var onCallInitiateFail  = function(){
+  $scope.onCallInitiateFail  = function(){
       console.error('call initiate failed');
   };
 
-  var onCall  = function(call){
+  $scope.onCall  = function(call){
       console.info('call started: ' + call.getId());
       $scope.call_id = call.getId();
       $audioRingOut[0].pause();
   };
 
-  var onCallTerminate  = function(){
+  $scope.onCallTerminate  = function(){
       console.info('call terminated');
       $audioRingOut[0].pause();      
   };
 
-  var onCallIncoming = function(call){
+  $scope.onCallIncoming = function(call){
       console.info('call incoming: ' + call.getId());
 
       $scope.call_id = call.getId();        
@@ -151,39 +145,64 @@ angular.module('Controllers', ['Security', 'Kandy'])
       $state.go('app.receive_call');
   };  
 
-  var onCallAnswered = function(){
+  $scope.onCallAnswered = function(){
       console.log('call answered');
       $audioRingIn[0].pause();      
       $audioRingOut[0].pause();         
   };
 
-  var onGetDirectory = function(data){
-    console.log(data);
+  $scope.onGetDirectory = function(data){
+    // console.log(data);
 
-    data.forEach(function(contact){      
+    // data.forEach(function(contact){      
+    //   if(contact.full_user_id != $scope.user.username)          
+    //   {
+    //       var index = $scope.contacts.length + 1;
+    //       contact.id = index;
+    //       $scope.contacts.push(contact);
+    //   }
+    // });
+
+    // KandyManager.watchPresence(data);
+
+    // $scope.contacts_loader = false;
+    // $scope.$apply();   
+
+    // // $state.go('app.call');        
+    $scope.contacts = [];
+
+    data.forEach(function(contact){ 
       if(contact.full_user_id != $scope.user.username)          
       {
-          var index = $scope.contacts.length + 1;
-          contact.id = index;
+          // contact.presence = 'text-muted';
           $scope.contacts.push(contact);
       }
     });
 
-    KandyManager.watchPresence(data);
-
+    console.log($scope.contacts);
     $scope.contacts_loader = false;
     $scope.$apply();   
 
-    $state.go('app.call');     
+    KandyManager.watchPresence(data);     
   };
 
-  var onPresenceNotification = function(username, state, description, activity){
+  $scope.onPresenceNotification = function(username, state, description, activity){
     console.info(username);
     console.info(state);
     console.info(description);    
     console.info(activity);    
   }
 })
+.controller('HomeController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+
+    SecurityAuthFactory.getUserAuth().then(function(data){
+
+        $scope.user = {username: data.kandy.user_id + KandyManager.domain, full_name: data.first_name + " " + data.last_name};
+        KandyManager.setup(null, $('#incoming-video')[0], $scope.onLoginSuccess, $scope.onLoginFailed, $scope.onCallInitiate, $scope.onCallInitiateFail, $scope.onCall, $scope.onCallTerminate, $scope.onCallIncoming, $scope.onCallAnswered, $scope.onPresenceNotification);
+    
+        KandyManager.login(data.kandy.user_id, data.kandy.password);
+    });
+  })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
     $audioRingIn[0].play();
@@ -203,4 +222,3 @@ angular.module('Controllers', ['Security', 'Kandy'])
       KandyManager.endCall($scope.call_id);
     }; 
 });
-;
