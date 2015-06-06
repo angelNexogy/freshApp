@@ -229,13 +229,18 @@
                     <sidebar-search></sidebar-search>
                     <li class="text-center"><i class="fa fa-refresh fa-spin-custom" ng-show="contacts_loader" style="font-size: x-large;"></i></li>
                     <li ng-repeat="contact in contacts">
-                        <a hrf="#">
-                            <span class="btn btn-default btn-circle"><i class="fa fa-user"></i>
-                                    </span>
-                            <span>
-                                &nbsp;&nbsp;{{contact.user_first_name}}&nbsp;{{contact.user_last_name}}
-                                &nbsp;&nbsp;<i class="fa fa-circle pull-right"></i>
-                            </span>
+                    	<a>
+	                        <div class="row">
+	                        	<div class="col-sm-8">
+	                            	<!-- <span class="btn btn-default btn-circle"> -->
+	                            	<span><i class="fa fa-user" style="font-size: x-large;"></i></span>
+		                            &nbsp;&nbsp;<span>{{contact.user_first_name}}&nbsp;{{contact.user_last_name}}</span>                                
+	                            </div>
+	                            <div class="col-sm-4">
+	                                <span><i class="fa fa-circle pull-right" ng-class="{'text-muted': contact.state == 11, 'text-success': contact.state == 0 }" style="margin-top: 8px;"></i></span>
+	                                <button type="button" class="btn btn-default btn-circle"><i class="fa fa-phone"></i></button>
+	                        	</div>
+	                        </div>
                         </a>
                     </li>           
                 </ul>

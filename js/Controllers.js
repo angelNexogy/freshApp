@@ -98,8 +98,6 @@ angular.module('Controllers', ['Security', 'Kandy'])
       SecurityAuthFactory.authObj().$unauth();
       KandyManager.logout();      
   };
-// })
-// .controller('HomeController', function($scope, $state, SecurityAuthFactory, KandyManager) {
   
   SecurityAuthFactory.getUserAuth().then(function(data){
 
@@ -185,7 +183,16 @@ angular.module('Controllers', ['Security', 'Kandy'])
     console.info(username);
     console.info(state);
     console.info(description);    
-    console.info(activity);    
+    console.info(activity);
+
+    $scope.contacts.forEach(function(contact){      
+      if(contact.full_user_id == username)          
+      {
+          contact.state = state;
+      }
+    });
+
+    $scope.$apply();
   }  
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
