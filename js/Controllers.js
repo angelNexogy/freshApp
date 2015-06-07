@@ -275,19 +275,47 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       KandyManager.rejectCall(data.call_id);
     };
 })
-.controller('ChatController', function($scope, KandyManager) {
+.controller('ChatController', function($scope, KandyManager, $firebaseArray, SecurityAuthFactory) {
 
   $scope.userChat = 'simplelogin42@development.nexogy.com';
 
   $scope.newMessaje = 'Mensaje de Prueba';
 
+  $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin40/' + 'simplelogin42/'));
+
   $scope.sendNewMessage = function(){
-    KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(){
+    KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(m){
+
+      var message = {
+        id: m.UUID,
+        type: m.contentType,
+        text: m.message.text
+      };
+
+      console.log(message);
+
+      $scope.messages.$add(message);
+
       console.log('Message Success');
+      console.log(m);
+
     }, function(e){
       console.log('Message Error. ' +  e);
-    })
+    });
   }
+
+  $scope.messages.$loaded()
+      .then(function(data) {
+        console.log(data);
+        $scope.messages = data; // true
+  })
+  .catch(function(error) {
+    console.log("Error:", error);
+  });
+
+  $scope.messages.$watch(function() {
+      console.log("data changed!");
+  });
 
 });
 
