@@ -259,7 +259,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $scope.event =  $scope.incoming ? 'Receiving Call...' : 'Initializing_call...';
 
     $scope.init_call = function(){
-      KandyManager.makeCall( $scope.call_user.full_user_id, false );//'simplelogin40@development.nexogy.com', false);
+      KandyManager.makeCall( $scope.call_user.full_user_id, true );//'simplelogin40@development.nexogy.com', false);
     };
 
     $scope.end_call = function(){
