@@ -113,7 +113,7 @@ angular
 
 	kandyServices.endCall = function(callId){ KandyAPI.Phone.endCall(callId); }
 
-	kandyServices.answerCall = function(callId){ KandyAPI.Phone.answerCall(callId, true); }
+	kandyServices.answerCall = function(callId, cameraOn){ KandyAPI.Phone.answerCall(callId, cameraOn); }
 
 	kandyServices.rejectCall = function(callId){ KandyAPI.Phone.rejectCall(callId); }
 

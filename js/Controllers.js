@@ -274,7 +274,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
     $scope.answer_call = function(){
       console.log($scope.call_id)
-      KandyManager.answerCall($scope.call_id);
+      KandyManager.answerCall($scope.call_id, true);
     };
 
     $scope.reject_call = function(){
