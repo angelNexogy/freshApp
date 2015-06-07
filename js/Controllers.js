@@ -197,7 +197,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
   $scope.call = function(callee){
 
-      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{callee: callee, video: false}, {size:'lg',keyboard: true, backdrop: 'static'});
+      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{callee: callee, video: false}, {size:'md',keyboard: true, backdrop: 'static'});
       dlg.result.then(function(name){
      
         },function(){
@@ -215,7 +215,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 })
 .controller('CallController', function($scope, $state, $modalInstance, data, SecurityAuthFactory, KandyManager) {
 
-    console.log(data);
+    $scope.user = data.callee;
     $scope.init_call = function(){
       $audioRingOut[0].play();
       KandyManager.makeCall( data.callee, data.video);//'simplelogin40@development.nexogy.com', true);
