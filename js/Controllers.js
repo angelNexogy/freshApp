@@ -208,7 +208,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
   var onIMReceived = function(data){
     if(data.messages.length > 0){
-      console.log('New Message');
+      console.log(data);
     }
     else{
       console.log('None');
