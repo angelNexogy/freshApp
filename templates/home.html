@@ -231,20 +231,19 @@
                     	<i class="fa fa-refresh fa-spin-custom" style="font-size: x-large;"></i>
                     	&nbsp;&nbsp;Loading Contacts ...
                     </li>
-                    <li ng-repeat="contact in contacts">
-                    	<a>
-	                        <div class="row">
-	                        	<div class="col-sm-8">
-	                            	<!-- <span class="btn btn-default btn-circle"> -->
-	                            	<span><i class="fa fa-user" style="font-size: x-large;"></i></span>
-		                            &nbsp;&nbsp;<span>{{contact.user_first_name}}&nbsp;{{contact.user_last_name}}</span>                                
-	                            </div>
-	                            <div class="col-sm-4">
-	                                <span><i class="fa fa-circle pull-right" ng-class="{'text-muted': contact.state == 11, 'text-success': contact.state == 0 }" style="margin-top: 8px;"></i></span>
-	                                <button type="button" class="btn btn-default btn-circle" ng-click="call(contact)"><i class="fa fa-phone"></i></button>
-	                        	</div>
-	                        </div>
-                        </a>
+                    <li ng-repeat="contact in contacts" style="padding: 10px;">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <a ckass="pull-left" style="background-color: transparent;" ng-click="openChat()">
+                                    <i class="fa fa-user" style="font-size: x-large;"></i> 
+                                    {{contact.user_first_name}}&nbsp;{{contact.user_last_name}}
+                                </a>
+                            </div>
+                            <div class="col-sm-4">
+                                <i class="fa fa-circle pull-right" ng-class="{'text-muted': contact.state == 11, 'text-success': contact.state == 0 }" style="margin-top: 8px;"></i>
+                                <button type="button" class="btn btn-default btn-circle" ng-click="call(contact)"><i class="fa fa-phone"></i></button>
+                            </div>
+                        </div>
                     </li>           
                 </ul>
             </div>

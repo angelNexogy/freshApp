@@ -85,7 +85,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   };
 })
 
-.controller('HomeController', function($scope, $state, dialogs, SecurityAuthFactory, KandyManager) {
+.controller('HomeController', function($scope, $state, dialogs, SecurityAuthFactory, KandyManager, $interval) {
 
 	$scope.hola = 'logged';
   $scope.login = null;
@@ -113,13 +113,11 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       KandyAPI.Phone.updatePresence(0);
       KandyManager.getDirectory(onGetDirectory);
-      // $state.go('app.video');
-      // KandyAPI.Phone.updatePresence(0); 
-      // loadAddressBook();
 
-      // setInterval(function(){
-      //     KandyManager.getIM(getIMSuccessCallback, getIMFailedCallback);
-      // }, 1000); 
+      console.log('Watching messages...');
+      $interval(function() {
+         KandyManager.getIM(onIMReceived, onIMFailed);
+      }, 1000);
   };
 
   var onLoginFailed = function(){
@@ -208,6 +206,19 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $scope.$apply();
   };  
 
+  var onIMReceived = function(data){
+    if(data.messages.length > 0){
+      console.log('New Message');
+    }
+    else{
+      console.log('None');
+    }
+  }
+
+  var onIMFailed = function(data){
+    console.log(data);
+  }
+
   $scope.call = function(user){
 
       var dlg = dialogs.create('templates/dialogs/call.html','CallController',{direction: 'out', user: user, video: false}, {size:'md',keyboard: false, backdrop: 'static'});
@@ -217,6 +228,12 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
         
       });
   }
+
+  $scope.openChat = function(){
+      $state.go('home.chat'); 
+  }
+
+
 
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
@@ -257,21 +274,39 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       
       KandyManager.rejectCall(data.call_id);
     };
+})
+.controller('ChatController', function($scope, KandyManager) {
 
-  // $scope.cancel = function(){
-  //   $modalInstance.dismiss('canceled');  
-  // }; // end cancel
-  
-  // $scope.save = function(){
-  //   $modalInstance.close($scope.user.name);
-  // }; // end save
-  
-  // $scope.hitEnter = function(evt){
-  //   if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.name,null) || angular.equals($scope.name,'')))
-  //       $scope.save();
-  // }; // end hitEnter
+  $scope.userChat = 'simplelogin42@development.nexogy.com';
 
+  $scope.newMessaje = 'Mensaje de Prueba';
 
-
+  $scope.sendNewMessage = function(){
+    KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(){
+      console.log('Message Success');
+    }, function(e){
+      console.log('Message Error. ' +  e);
+    })
+  }
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
