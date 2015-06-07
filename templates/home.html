@@ -253,9 +253,27 @@
 
     <div id="page-wrapper">
 
-		<div ui-view>
+    	<div class="row">
+    		<div class="space-20"></div>
 		</div>
 
+		<div class="row" ng-hide="chat">	
+    		<div class="col-md-8">
+		        <div class="panel panel-default">
+    			    <div class="panel-header">
+	    	            <div id="video-container">
+							<div id="incoming-video"></div>
+							<hr />
+			            </div>
+				        <div class="space-10"></div>
+					</div>
+					<div ui-view></div>
+				</div>
+			</div>
+		</div>
+        <div class="row" ng-show="chat">
+            <div ui-view></div>        
+        </div>
     </div>
 
     <!-- Metis Menu Plugin JavaScript -->
