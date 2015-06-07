@@ -233,7 +233,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
     $scope.init_call = function(){
       $audioRingOut[0].play();
-      KandyManager.makeCall( data.callee, data.video );//'simplelogin40@development.nexogy.com', false);
+      KandyManager.makeCall( data.full_user_id, data.video );//'simplelogin40@development.nexogy.com', false);
     };
 
     $scope.end_call = function(){
@@ -246,11 +246,12 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     }
 
     $scope.answer_call = function(){
-      KandyManager.answerCall($scope.call.getId());
+      console.log()
+      KandyManager.answerCall($scope.call_id);
     };
 
     $scope.reject_call = function(){
-      KandyManager.rejectCall($scope.call.getId());
+      KandyManager.rejectCall($scope.call_id);
     };
 
   // $scope.cancel = function(){
