@@ -98,6 +98,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   $scope.oncall = false;
   $scope.dialing = false;
   $scope.event = '';
+  $scope.chat = true;
 
   $scope.logout = function(){
       SecurityAuthFactory.authObj().$unauth();
