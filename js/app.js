@@ -23,7 +23,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 url: "/home",
                 templateUrl: 'templates/home.html',
                 controller: 'HomeController'
-            })            
+            })  
+            .state('home.chat', {
+                url: "/chat",
+                templateUrl: 'templates/chat.html',
+                controller: 'ChatController'
+            })                
             .state('home.call', {
                 url: "/call",
                 templateUrl: 'templates/dialogs/call.html',
