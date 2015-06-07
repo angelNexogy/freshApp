@@ -112,6 +112,8 @@ angular
 
 	kandyServices.answerCall = function(callId){ KandyAPI.Phone.answerCall(callId, true); }
 
+	kandyServices.rejectCall = function(callId){ KandyAPI.Phone.rejectCall(callId); }
+
 	kandyServices.getAddressBook = function(successCallback){ KandyAPI.Phone.retrievePersonalAddressBook(successCallback); }
 
 	// kandyServices.createContact = function(successCallback){ KandyAPI.Phone.addToPersonalAddressBook(contactsObject, successCallback); }	
