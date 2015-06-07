@@ -141,6 +141,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       console.info('call started: ' + call.getId());
       $scope.call_id = call.getId();
       $audioRingOut[0].pause();
+
+      $scope.$apply();
   };
 
   var onCallTerminate  = function(){
@@ -154,8 +156,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
-
-      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static'});
+      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call_id: $scope.call_id, call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static', scope: $scope});
       
       dlg.result.then(function(name){
      
@@ -239,6 +240,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
     $scope.end_call = function(){
       KandyManager.endCall($scope.call_id);
+      $modalInstance.dismiss('closed');  
     };
 
     if(data.direction == 'in')
@@ -247,12 +249,12 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     }
 
     $scope.answer_call = function(){
-      console.log()
-      KandyManager.answerCall($scope.call_id);
+      console.log($scope.call_id)
+      KandyManager.answerCall(data.call_id);
     };
 
     $scope.reject_call = function(){
-      KandyManager.rejectCall($scope.call_id);
+      KandyManager.rejectCall(data.call_id);
     };
 
   // $scope.cancel = function(){
