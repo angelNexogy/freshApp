@@ -1,18 +1,29 @@
 	<div class="modal-content">
 	    <div class="modal-header text-center">
+	    	<div class="row">
+	    		<div class="col-sm-6 col-sm-offset-3">
+			    	<div id="video-container">
+					    <div class="video" id="incoming-video"></div>
+					</div>
+				</div>
+			</div>
+
 	        <button type="button" class="btn btn-primary btn-circle btn-xl" style="width: 150px; height: 150px; border-radius: 75px">
 	        	<i class="fa fa-user" style="font-size: 90px"></i>
 	        </button>
 	        <div class="space-10"></div>
-	        <h2 class="modal-title" id="myModalLabel">{{user.user_first_name}} {{user.user_last_name}}</h2>
+	        <h2 class="modal-title" id="myModalLabel">{{direction ? call.callerName : user.user_first_name + ' ' + user.user_last_name}}</h2>
 	    </div>
 	    <div class="modal-body">
-	        <h4 class="text-center">Calling...</h4>
+	        <h4 class="text-center">{{ direction ? 'Receiving Call...' : 'Calling...' }}</h4>
 	    </div>
 	    <div class="modal-footer" style="text-align: center;">
-    	<button type="button" class="btn btn-success" data-dismiss="modal">
+    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="direction" ng-click="answer_call()">
         	<p style="font-size: 30px">Answer</p>
         </button>
+    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="direction" ng-click="answer_reject()">
+        	<p style="font-size: 30px">Reject Call</p>
+        </button>        
         <button type="button" class="btn btn-default" data-dismiss="modal">
         	<i class="fa fa-microphone-slash" style="font-size: 50px"></i>
         </button>
