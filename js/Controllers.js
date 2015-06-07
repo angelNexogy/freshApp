@@ -1,4 +1,4 @@
-angular.module('Controllers', ['Security', 'Kandy'])
+angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main'])
 
 .controller('AuthController', function($rootScope, $scope, $state, SecurityAuthFactory, KandyManager) {
 	//User login data
@@ -85,7 +85,7 @@ angular.module('Controllers', ['Security', 'Kandy'])
   };
 })
 
-.controller('HomeController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('HomeController', function($scope, $state, dialogs, SecurityAuthFactory, KandyManager) {
 
 	$scope.hola = 'logged';
   $scope.login = null;
@@ -193,7 +193,17 @@ angular.module('Controllers', ['Security', 'Kandy'])
     });
 
     $scope.$apply();
-  }  
+  };  
+
+  $scope.call = function(callee){
+
+      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{callee: callee, video: false}, {size:'lg',keyboard: true, backdrop: 'static'});
+      dlg.result.then(function(name){
+     
+        },function(){
+        
+      });
+  }
 })
 .controller('IncomingCallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
 
@@ -203,15 +213,32 @@ angular.module('Controllers', ['Security', 'Kandy'])
       KandyManager.answerCall($scope.call_id);
     };
 })
-.controller('CallController', function($scope, $state, SecurityAuthFactory, KandyManager) {
+.controller('CallController', function($scope, $state, $modalInstance, data, SecurityAuthFactory, KandyManager) {
 
+    console.log(data);
     $scope.init_call = function(){
       $audioRingOut[0].play();
-      KandyManager.makeCall('simplelogin40@development.nexogy.com', true);
+      KandyManager.makeCall( data.callee, data.video);//'simplelogin40@development.nexogy.com', true);
     };
 
     $scope.end_call = function(){
       KandyManager.endCall($scope.call_id);
     }; 
+
+  // $scope.cancel = function(){
+  //   $modalInstance.dismiss('canceled');  
+  // }; // end cancel
+  
+  // $scope.save = function(){
+  //   $modalInstance.close($scope.user.name);
+  // }; // end save
+  
+  // $scope.hitEnter = function(evt){
+  //   if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.name,null) || angular.equals($scope.name,'')))
+  //       $scope.save();
+  // }; // end hitEnter
+
+
+
+
 });
-;
