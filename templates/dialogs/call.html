@@ -1,4 +1,43 @@
-	<div class="modal-content">
+<div class="row">	
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+				<div class="video" id="incoming-video"></div>	
+
+		        <button type="button" class="btn btn-primary btn-circle btn-xl" style="width: 150px; height: 150px; border-radius: 75px">
+		        	<i class="fa fa-user" style="font-size: 90px"></i>
+		        </button>
+
+		        <div class="space-10"></div>
+
+		        <h2>{{incoming ? call_user : call_user.user_first_name + ' ' + call_user.user_last_name}}</h2>
+		    </div>
+		    <div class="panel-body">
+		        <h4 class="text-center">{{ event }}</h4>
+		    </div>
+		    <div class="panel-footer" style="text-align: center;">
+		    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="incoming" ng-click="answer_call()">
+		        	<p style="font-size: 30px">Answer</p>
+		        </button>
+		    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="incoming" ng-click="reject_call()">
+		        	<p style="font-size: 30px">Reject Call</p>
+		        </button>        
+		        <button type="button" class="btn btn-default" data-dismiss="modal">
+		        	<i class="fa fa-microphone-slash" style="font-size: 50px"></i>
+		        </button>
+		        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="init_call()" ng-if="incoming == false">
+		        	<i class="fa fa-phone" style="font-size: 50px"></i>
+		        </button>
+	        
+	        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+	        <!-- <button class="btn btn-success" id="initialize-call-btn" ng-click="init_call()">Call</button>	 -->
+			<!-- <button class="btn btn-success" id="initialize-end-btn" ng-click="end_call()">End Call</button> -->
+		    </div>
+        </div>
+    </div>
+</div>	
+
+<!-- 	<div class="modal-content">
 	    <div class="modal-header text-center">
 	    	<div class="row">
 	    		<div class="col-sm-6 col-sm-offset-3">
@@ -29,10 +68,10 @@
         </button>
         <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="init_call()" ng-if="direction == false">
         	<i class="fa fa-phone" style="font-size: 50px"></i>
-        </button>
+        </button>-->
         
         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
         <!-- <button class="btn btn-success" id="initialize-call-btn" ng-click="init_call()">Call</button>	 -->
 		<!-- <button class="btn btn-success" id="initialize-end-btn" ng-click="end_call()">End Call</button> -->
-	    </div>
-	</div>
+<!--	    </div>
+	</div> -->

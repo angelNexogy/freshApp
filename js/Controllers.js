@@ -93,6 +93,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   $scope.contacts = [];
   $scope.contacts_loader = true;
   $scope.user = {};
+  $scope.incoming = false;
+  $scope.call_user = null;
 
   $scope.logout = function(){
       SecurityAuthFactory.authObj().$unauth();
@@ -164,13 +166,17 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
-      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call_id: $scope.call_id, call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static', scope: $scope});
+      $scope.incoming = false;
+      $scope.call_user = call.callerName;
+
+      $state.go('home.call');
+      // var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call_id: $scope.call_id, call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static', scope: $scope});
       
-      dlg.result.then(function(name){
+      // dlg.result.then(function(name){
      
-        },function(){
+      //   },function(){
         
-      });
+      // });
 
       // $state.go('app.receive_call');
   };  
@@ -223,12 +229,15 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
   $scope.call = function(user){
 
-      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{direction: 'out', user: user, video: false}, {size:'md',keyboard: false, backdrop: 'static'});
-      dlg.result.then(function(name){
+      // var dlg = dialogs.create('templates/dialogs/call.html','CallController',{direction: 'out', user: user, video: false}, {size:'md',keyboard: false, backdrop: 'static'});
+      // dlg.result.then(function(name){
      
-        },function(){
+      //   },function(){
         
-      });
+      // });
+    $scope.incoming = false;
+    $scope.call_user = user;
+    $state.go('home.call');
   }
 
 })
@@ -240,16 +249,16 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       KandyManager.answerCall($scope.call_id);
     };
 })
-.controller('CallController', function($scope, $state, $modalInstance, data, SecurityAuthFactory, KandyManager) {
+.controller('CallController', function($scope, $state,/* $modalInstance, data, */SecurityAuthFactory, KandyManager) {
 
-    $scope.user = data.user;
-    $scope.direction = data.direction == 'in';
-    $scope.call = data.call || null;    
+    // $scope.user = data.user;
+    // $scope.direction = data.direction == 'in';
+    // $scope.call = data.call || null;    
 
-    $scope.event =  $scope.direction ? 'Receiving Call...' : 'Initializing_call...';
+    $scope.event =  $scope.incoming ? 'Receiving Call...' : 'Initializing_call...';
 
     $scope.init_call = function(){
-      KandyManager.makeCall( data.user.full_user_id, data.video );//'simplelogin40@development.nexogy.com', false);
+      KandyManager.makeCall( $scope.call_user.full_user_id, false );//'simplelogin40@development.nexogy.com', false);
     };
 
     $scope.end_call = function(){
@@ -257,19 +266,19 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $modalInstance.dismiss('closed');  
     };
 
-    if(data.direction == 'in')
+    if($scope.incoming)
     {
         $audioRingIn[0].play();
     }
 
     $scope.answer_call = function(){
-      console.log(data.call_id)
-      KandyManager.answerCall(data.call_id);
+      console.log($scope.call_id)
+      KandyManager.answerCall($scope.call_id);
     };
 
     $scope.reject_call = function(){
 
-      KandyManager.rejectCall(data.call_id);
+      KandyManager.rejectCall($scope.call_id);
     };
 
   // $scope.cancel = function(){
@@ -284,8 +293,5 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   //   if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.name,null) || angular.equals($scope.name,'')))
   //       $scope.save();
   // }; // end hitEnter
-
-
-
 
 });

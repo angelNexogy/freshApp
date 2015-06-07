@@ -24,11 +24,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 templateUrl: 'templates/home.html',
                 controller: 'HomeController'
             })            
-    //         .state('app', {
-    //             url: "/home",
-    //             templateUrl: 'templates/layout.html',
-    //             controller: 'BaseController'
-    //         })
+            .state('home.call', {
+                url: "/call",
+                templateUrl: 'templates/dialogs/call.html',
+                controller: 'CallController'
+            })
     //         .state('app.receive_call', {
     //             url: "/receive",
     //             templateUrl: 'templates/get_call.html',
