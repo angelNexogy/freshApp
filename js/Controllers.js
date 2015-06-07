@@ -254,6 +254,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     };
 
     $scope.reject_call = function(){
+      
       KandyManager.rejectCall(data.call_id);
     };
 
