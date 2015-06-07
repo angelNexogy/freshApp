@@ -83,7 +83,7 @@ angular
 	//   }
 	// });
 
-	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallEndedFailed, onCallIncoming, onCallAnswer, onCallAnsweredFailed, onPresenceNotification){
+	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallRejected, onCallTerminate, onCallEndedFailed, onCallIncoming, onCallAnswer, onCallAnsweredFailed, onPresenceNotification){
 							KandyAPI.Phone.setup({
 					          remoteVideoContainer: incomingVideo,
 					          localVideoContainer: outgoingVideo,
@@ -94,6 +94,7 @@ angular
 					            callinitiated: onCallInitiate,
 					            callinitiatefailed: onCallInitiateFail,
 					            oncall: onCall,
+            					callrejected: onCallRejected,					            
 					            callended: onCallTerminate,	
             					callendedfailed: onCallEndedFailed,
 

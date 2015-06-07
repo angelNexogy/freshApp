@@ -5,3 +5,8 @@
 .space-20{
 	margin-top: 20px;
 }
+
+video{
+	width: 100%!important;
+	max-height: 30%!important;
+}
