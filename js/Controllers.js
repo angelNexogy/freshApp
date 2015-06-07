@@ -276,12 +276,14 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       //   },function(){
         
       // });
+    $scope.chat = false;
     $scope.incoming = false;
     $scope.call_user = user;
     $state.go('home.call');
   }
 
   $scope.openChat = function(){
+      $scope.chat = true;
       $state.go('home.chat'); 
   }
 
