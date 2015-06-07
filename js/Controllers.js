@@ -249,7 +249,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     }
 
     $scope.answer_call = function(){
-      console.log($scope.call_id)
+      console.log(data.call_id)
       KandyManager.answerCall(data.call_id);
     };
 
