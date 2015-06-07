@@ -169,6 +169,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $scope.incoming = false;
       $scope.call_user = call.callerName;
 
+      $scope.$apply();
       $state.go('home.call');
       // var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call_id: $scope.call_id, call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static', scope: $scope});
       
