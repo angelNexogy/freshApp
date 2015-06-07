@@ -102,7 +102,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   SecurityAuthFactory.getUserAuth().then(function(data){
 
       $scope.user = {username: data.kandy.user_id + KandyManager.domain, full_name: data.first_name + " " + data.last_name};
-      KandyManager.setup(null, $('#incoming-video')[0], onLoginSuccess, onLoginFailed, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswered, onPresenceNotification);
+      KandyManager.setup(null, $('#incoming-video')[0], onLoginSuccess, onLoginFailed, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallEndedFailed, onCallIncoming, onCallAnswered, onCallAnsweredFailed, onPresenceNotification);
   
       KandyManager.login(data.kandy.user_id, data.kandy.password);
   });
@@ -130,6 +130,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       console.info('call initiate: ' + call.getId());
 
       $scope.call_id = call.getId();
+      $audioRingOut[0].play();      
   };
 
   var onCallInitiateFail = function(){
@@ -142,14 +143,21 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $scope.call_id = call.getId();
       $audioRingOut[0].pause();
 
-      $scope.$apply();
+      // $scope.$apply();
   };
 
   var onCallTerminate  = function(){
       console.info('call terminated');
+
+      $scope.call_id = null;      
       $audioRingOut[0].pause();      
       $audioRingIn[0].pause();      
   };
+
+  var onCallEndedFailed = function() {
+    console.info('callendfailed');
+    $scope.call_id = null;
+  }
 
   var onCallIncoming = function(call){
       console.info('call incoming: ' + call.getId());
@@ -172,6 +180,11 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $audioRingIn[0].pause();      
       // $audioRingOut[0].pause();         
   };
+
+  var onCallAnsweredFailed = function (call) {
+    console.debug('call answer failed');
+    $scope.call_id = null;
+  }  
 
   var onGetDirectory = function(data){
     console.log(data);
@@ -233,8 +246,9 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $scope.direction = data.direction == 'in';
     $scope.call = data.call || null;    
 
+    $scope.event =  $scope.direction ? 'Receiving Call...' : 'Initializing_call...';
+
     $scope.init_call = function(){
-      $audioRingOut[0].play();
       KandyManager.makeCall( data.user.full_user_id, data.video );//'simplelogin40@development.nexogy.com', false);
     };
 
@@ -254,7 +268,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     };
 
     $scope.reject_call = function(){
-      
+
       KandyManager.rejectCall(data.call_id);
     };
 
