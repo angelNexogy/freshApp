@@ -97,6 +97,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   $scope.call_user = null;
   $scope.oncall = false;
   $scope.dialing = false;
+  $scope.event = '';
 
   $scope.logout = function(){
       SecurityAuthFactory.authObj().$unauth();
@@ -134,13 +135,13 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       console.info('call initiate: ' + call.getId());
 
       $scope.call_id = call.getId();     
-      $audioRingOut[0].play();      
+      $audioRingOut[0].play();
       $scope.$apply();
   };
 
   var onCallInitiateFail = function(){
       console.error('call initiate failed');
-        $audioRingOut[0].pause();      
+      $audioRingOut[0].pause();      
   };
 
   var onCall  = function(call){
@@ -149,7 +150,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $audioRingOut[0].pause();
       
       $scope.oncall = true;
-      $scope.dialing = false;      
+      $scope.dialing = false;
+      $scope.event =  '';
       $scope.$apply();
   };
 
@@ -282,7 +284,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     // $scope.direction = data.direction == 'in';
     // $scope.call = data.call || null;    
 
-    $scope.event =  $scope.incoming ? 'Receiving Call...' : 'Initializing_call...';
+    $scope.event =  $scope.incoming ? 'Receiving Call...' : '';
 
     $scope.init_call = function(){
       $scope.dialing = true;      

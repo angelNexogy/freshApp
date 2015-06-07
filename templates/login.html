@@ -7,23 +7,23 @@
                 </div>
                 <div class="panel-body">
                     <form role="form" ng-submit="passwordLogin()">
-                        <fieldset>
+                        <fieldset class="text-center">
                             <div class="form-group">
                                 <input class="form-control" ng-model="loginData.email" placeholder="E-mail" name="email" type="email" autofocus>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" ng-model="loginData.password" placeholder="Password" name="password" type="password" value="">
                             </div>
-                            <div class="checkbox">
+                            <!-- div class="checkbox">
                                 <label>
                                     <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                 </label>
-                            </div>
+                            </div> -->
                             <!-- Change this to a button or input when using this as a form -->
                             <div class="form-group text-center">
                                 <button type="submit" class="btn btn-primary">Login</button>
-                            </div>                            
-<!--                             <a ui-sref="dashboard.home" class="btn btn-lg btn-success btn-block">Login</a> -->
+                            </div>
+                            <a href="#" ng-click="showLoginForm = false"> Register here </a>
                         </fieldset>
                     </form>
                 </div>
@@ -32,17 +32,6 @@
     </div>
 </div>
 <!-- 
-<form ng-submit="passwordLogin()" ng-show="showLoginForm">
-  <div class="form-group">
-    <label for="username">E-mail</label>
-    <input type="email" ng-model="loginData.email"class="form-control" id="username">
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input type="password" ng-model="loginData.password" class="form-control" id="password">
-  </div>
-  <button type="submit" class="btn btn-default">Sign up</button>
-</form>
 
 <form ng-submit="userRegister()" ng-hide="showLoginForm">
   <div class="form-group">

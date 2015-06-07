@@ -1,69 +1,28 @@
 
-		    <div class="panel-body">
-				</hr>
-				<div ng-if="oncall == false" >
-			        <button type="button" class="btn btn-primary btn-circle btn-xl" style="width: 150px; height: 150px; border-radius: 75px">
-			        	<i class="fa fa-user" style="font-size: 90px"></i>
-			        </button>	
+<div class="panel-body text-center">
+	<div ng-show="!oncall">
+        <button type="button" class="btn btn-primary btn-circle btn-xl" style="width: 150px; height: 150px; border-radius: 75px">
+        	<i class="fa fa-user" style="font-size: 90px"></i>
+        </button>	
 
-			        <div class="space-10"></div>
-	        	</div>
+        <div class="space-10"></div>
 
-		        <h2>{{incoming ? call_user : call_user.user_first_name + ' ' + call_user.user_last_name}}</h2>
-
-		        <h4 class="text-center">{{ event }}</h4>
-		    </div>
-		    <div class="panel-footer" style="text-align: center;">
-		    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="incoming" ng-click="answer_call()">
-		        	<p style="font-size: 30px">Answer</p>
-		        </button>
-		    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="incoming" ng-click="reject_call()">
-		        	<p style="font-size: 30px">Reject Call</p>
-		        </button>        
-		        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-if="dialing == false && incoming == false" ng-click="init_call()" ng-if="incoming == false">
-		        	<i class="fa fa-phone" style="font-size: 50px">Call</i>
-		        </button>
-				<button class="btn btn-success" id="initialize-end-btn" ng-if="(incoming && oncall) || (!incoming && oncall)" ng-click="end_call()">End Call</button>	        
-	        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-	        <!-- <button class="btn btn-success" id="initialize-call-btn" ng-click="init_call()">Call</button>	 -->
-			<!-- <button class="btn btn-success" id="initialize-end-btn" ng-click="end_call()">End Call</button> -->
-		    </div>
-
-<!-- 	<div class="modal-content">
-	    <div class="modal-header text-center">
-	    	<div class="row">
-	    		<div class="col-sm-6 col-sm-offset-3">
-			    	<div id="video-container">
-					    <div class="video" id="incoming-video"></div>
-					</div>
-				</div>
-			</div>
-
-	        <button type="button" class="btn btn-primary btn-circle btn-xl" style="width: 150px; height: 150px; border-radius: 75px">
-	        	<i class="fa fa-user" style="font-size: 90px"></i>
-	        </button>
-	        <div class="space-10"></div>
-	        <h2 class="modal-title" id="myModalLabel">{{direction ? call.callerName : user.user_first_name + ' ' + user.user_last_name}}</h2>
-	    </div>
-	    <div class="modal-body">
-	        <h4 class="text-center">{{ event }}</h4>
-	    </div>
-	    <div class="modal-footer" style="text-align: center;">
-    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="direction" ng-click="answer_call()">
-        	<p style="font-size: 30px">Answer</p>
-        </button>
-    	<button type="button" class="btn btn-success" data-dismiss="modal" ng-if="direction" ng-click="reject_call()">
-        	<p style="font-size: 30px">Reject Call</p>
-        </button>        
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-        	<i class="fa fa-microphone-slash" style="font-size: 50px"></i>
-        </button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="init_call()" ng-if="direction == false">
-        	<i class="fa fa-phone" style="font-size: 50px"></i>
-        </button>-->
-        
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-        <!-- <button class="btn btn-success" id="initialize-call-btn" ng-click="init_call()">Call</button>	 -->
-		<!-- <button class="btn btn-success" id="initialize-end-btn" ng-click="end_call()">End Call</button> -->
-<!--	    </div>
-	</div> -->
+        <h2>{{incoming ? call_user : call_user.user_first_name + ' ' + call_user.user_last_name}}</h2>
+        <h4 class="text-center">
+        	<i class="fa fa-refresh fa-spin-custom" style="font-size: x-large;" ng-show="dialing || incoming"></i>
+        	&nbsp;&nbsp;{{ (dialing && !incoming) ? 'Calling...' :  event }}
+        </h4>			        
+	</div>
+</div>
+<div class="panel-footer" style="text-align: center;">
+	<button type="button" class="btn btn-success btn-circle btn-lg" data-dismiss="modal" ng-if="incoming && !oncall" ng-click="answer_call()">
+    	<i class="fa fa-phone"></i>
+    </button>
+	<button type="button" class="btn btn-danger btn-circle btn-lg" data-dismiss="modal" ng-if="incoming && !oncall" ng-click="reject_call()">
+    	<span class="glyphicon glyphicon-phone-alt"></span>
+    </button>        
+    <button type="button" class="btn btn-success btn-circle btn-lg" data-dismiss="modal" ng-if="!dialing && !incoming" ng-click="init_call()" ng-if="incoming == false">
+    	<i class="fa fa-phone"></i>
+    </button>
+	<button class="btn btn-danger btn-circle btn-lg" id="initialize-end-btn" ng-if="(incoming && oncall) || (!incoming && oncall)" ng-click="end_call()"><span class="glyphicon glyphicon-phone-alt"></span></button>	        
+</div>
