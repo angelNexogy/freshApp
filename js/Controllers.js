@@ -166,7 +166,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
-      $scope.incoming = false;
+      $scope.incoming = true;
       $scope.call_user = call.callerName;
 
       $scope.$apply();
