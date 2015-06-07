@@ -154,7 +154,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
-      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call: call, direction: 'in', user: user_id, video: false}, {size:'md',keyboard: false, backdrop: 'static'});
+
+      var dlg = dialogs.create('templates/dialogs/call.html','CallController',{call: call, direction: 'in', video: false}, {size:'md',keyboard: false, backdrop: 'static'});
       
       dlg.result.then(function(name){
      
