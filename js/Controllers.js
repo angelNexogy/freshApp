@@ -233,7 +233,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
     $scope.init_call = function(){
       $audioRingOut[0].play();
-      KandyManager.makeCall( data.full_user_id, data.video );//'simplelogin40@development.nexogy.com', false);
+      KandyManager.makeCall( data.user.full_user_id, data.video );//'simplelogin40@development.nexogy.com', false);
     };
 
     $scope.end_call = function(){
