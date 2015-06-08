@@ -186,6 +186,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
+      $scope.chat = false;
       $scope.incoming = true;
       $scope.call_user = call.callerName;
 
@@ -339,18 +340,27 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
   $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin40/' + 'simplelogin42/'));
 
+  var receiverPath = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin42/' + 'simplelogin40/'));
+
   $scope.sendNewMessage = function(){
     KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(m){
 
       var message = {
         id: m.UUID,
         type: m.contentType,
-        text: m.message.text
+        text: m.message.text,
+        read: false,
+        user: 'simplelogin40'
       };
 
       console.log(message);
 
+      //Register message in sender path
       $scope.messages.$add(message);
+
+      receiverPath.$add(message);
+
+      //Register message in receiver path
 
       console.log('Message Success');
       console.log(m);

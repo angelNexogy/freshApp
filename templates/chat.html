@@ -1,11 +1,35 @@
-<div ng-repeat="message in messages">
-    <p>{{message.text}}</p>
-</div>
 
-<div class="form-group input-group" style="position: fixed; bottom: 0;">
-	<span class="input-group-btn">
-        <button ng-click="sendNewMessage()" class="btn btn-default btn-lg" type="button"><i class="fa fa-plus"></i>
-        </button>
-    </span>
-    <input type="text" class="form-control input-lg">
+<div class="chat-panel panel panel-default" style="min-height: 100%; border-color: transparent; border: 0;">
+    <!-- /.panel-heading -->
+    <div class="panel-body" style="height: 100%">
+        <ul class="chat">
+            <li class="left clearfix" ng-repeat="message in messages">
+                <span class="chat-img pull-left">
+                    <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle">
+                </span>
+                <div class="chat-body clearfix">
+                    <div class="header">
+                        <strong class="primary-font">{{message.user}}</strong>
+                        <small class="pull-right text-muted">
+                            <i class="fa fa-clock-o fa-fw"></i> 12 mins ago
+                        </small>
+                    </div>
+                    <p>
+                        {{message.text}}
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <!-- /.panel-body -->
+    <div class="panel-footer" style="border-color: #ddd;">
+        <div class="input-group">
+            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here...">
+            <span class="input-group-btn">
+                <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="sendNewMessage()">
+                    Send
+                </button>
+            </span>
+        </div>
+    </div>
 </div>
