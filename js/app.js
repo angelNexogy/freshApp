@@ -10,7 +10,7 @@ var myApp = angular.module('starter',
 myApp.config(function ($stateProvider, $urlRouterProvider) {
 
     // For any unmatched url, redirect to /
-    $urlRouterProvider.otherwise("/home");
+    $urlRouterProvider.otherwise("/");
 
     // Now set up the states
     $stateProvider
@@ -22,13 +22,20 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
             .state('home', {
                 url: "/home",
                 templateUrl: 'templates/home.html',
-                controller: 'HomeController'
-            })            
-    //         .state('app', {
-    //             url: "/home",
-    //             templateUrl: 'templates/layout.html',
-    //             controller: 'BaseController'
-    //         })
+                controller: 'HomeController',
+                // params: {init: true}
+                // defaultParams: {init: true}
+            })  
+            .state('home.chat', {
+                url: "/chat",
+                templateUrl: 'templates/chat.html',
+                controller: 'ChatController'
+            })                
+            .state('home.call', {
+                url: "/call",
+                templateUrl: 'templates/dialogs/call.html',
+                controller: 'CallController'
+            })
     //         .state('app.receive_call', {
     //             url: "/receive",
     //             templateUrl: 'templates/get_call.html',
@@ -102,7 +109,7 @@ myApp.run(function ($rootScope, $state, $location, SecurityAuthFactory) {
         }
         else if(SecurityAuthFactory.authObj().$getAuth() && toState.name == 'login'){
             event.preventDefault();
-            $state.go('home');
+            $state.go('home'/*, {init: false}*/);
         }
     });
 });

@@ -83,7 +83,7 @@ angular
 	//   }
 	// });
 
-	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallTerminate, onCallIncoming, onCallAnswer, onPresenceNotification){
+	kandyServices.setup = function(outgoingVideo, incomingVideo, loginSuccessCallback, loginFailedCallback, onCallInitiate, onCallInitiateFail, onCall, onCallRejected, onCallTerminate, onCallEndedFailed, onCallIncoming, onCallAnswer, onCallAnsweredFailed, onPresenceNotification){
 							KandyAPI.Phone.setup({
 					          remoteVideoContainer: incomingVideo,
 					          localVideoContainer: outgoingVideo,
@@ -94,9 +94,13 @@ angular
 					            callinitiated: onCallInitiate,
 					            callinitiatefailed: onCallInitiateFail,
 					            oncall: onCall,
+            					callrejected: onCallRejected,					            
 					            callended: onCallTerminate,	
+            					callendedfailed: onCallEndedFailed,
+
             					callincoming: onCallIncoming,
             					callanswered: onCallAnswer,
+            					callansweredFailed: onCallAnsweredFailed,            					
             					presencenotification: onPresenceNotification,            					
 							  }
 							});
@@ -110,7 +114,9 @@ angular
 
 	kandyServices.endCall = function(callId){ KandyAPI.Phone.endCall(callId); }
 
-	kandyServices.answerCall = function(callId){ KandyAPI.Phone.answerCall(callId, true); }
+	kandyServices.answerCall = function(callId, cameraOn){ KandyAPI.Phone.answerCall(callId, cameraOn); }
+
+	kandyServices.rejectCall = function(callId){ KandyAPI.Phone.rejectCall(callId); }
 
 	kandyServices.getAddressBook = function(successCallback){ KandyAPI.Phone.retrievePersonalAddressBook(successCallback); }
 

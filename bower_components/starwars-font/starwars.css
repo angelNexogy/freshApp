@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'StarJedi';
+  src: url('Starjedi.ttf') format('truetype');
+  /*font-weight: normal;
+  font-style: normal;*/
+}
+
+@font-face {
+  font-family: 'StarHol';
+  src: url('Starhol.ttf') format('truetype');
+  /*font-weight: normal;
+  font-style: normal;*/
+}
+
+@font-face {
+  font-family: 'StarJediRounded';
+  src: url('Star_Jedi_Rounded.ttf') format('truetype');
+ /* font-weight: normal;
+  font-style: normal;*/
+}
+
+.jedi{
+	/*font: normal normal normal 14px/1 StarJedi;*/
+  font-family: 'StarJedi';	
+}
+
+.hol{
+	/*font: normal normal normal 14px/1 StarHol;*/
+  font-family: 'StarHol';	
+}
+
+.rounded{
+	/*font: normal normal normal 14px/1 StarJediRounded;*/
+  font-family: 'StarJediRounded';	
+}
