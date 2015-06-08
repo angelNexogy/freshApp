@@ -9,7 +9,10 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+            <!-- <a class="navbar-brand"><b>HAN-SO</b>ftPhone</a> -->
+            <a style="float: left; height: 50px; padding: 15px 15px; font-size: 25px; line-height: 20px;"><b style="color: rgb(255, 219, 107);">HAN-SO</b><b style="color: rgb(0, 82, 136);">ftPhone</b></a>
+
+
         </div>
         <!-- /.navbar-header -->
 
@@ -206,14 +209,14 @@
             <!-- /.dropdown -->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <i class="fa fa-user fa-fw"></i>&nbsp;{{ user.full_name }}&nbsp;<i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                  <!--   <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
                     <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
+                    </li> -->
+                    <!-- <li class="divider"></li> -->
                     <li><a ng-click="logout()" href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                     </li>
                 </ul>
@@ -234,13 +237,13 @@
                     <li ng-repeat="contact in contacts" style="padding: 10px;">
                         <div class="row">
                             <div class="col-sm-8">
-                                <a ckass="pull-left" style="background-color: transparent;" ng-click="openChat()">
+                                <a ckass="pull-left" style="background-color: transparent;" ng-click="openChat()" href="#">
                                     <i class="fa fa-user" style="font-size: x-large;"></i> 
                                     {{contact.user_first_name}}&nbsp;{{contact.user_last_name}}
                                 </a>
                             </div>
                             <div class="col-sm-4">
-                                <i class="fa fa-circle pull-right" ng-class="{'text-muted': contact.state == 11, 'text-success': contact.state == 0 }" style="margin-top: 8px;"></i>
+                                <i class="fa fa-circle pull-right" ng-class="{'text-muted': contact.state != 0, 'text-success': contact.state == 0 }" style="margin-top: 8px;"></i>
                                 <button type="button" class="btn btn-default btn-circle" ng-click="call(contact)"><i class="fa fa-phone"></i></button>
                             </div>
                         </div>
@@ -257,13 +260,12 @@
     		<div class="space-20"></div>
 		</div>
 
-		<div class="row" ng-hide="chat">	
+		<div class="row" ng-hide="nocall">	
     		<div class="col-md-8">
 		        <div class="panel panel-default">
-    			    <div class="panel-header">
+    			    <div class="panel-header" ng-show="oncall">
 	    	            <div id="video-container">
 							<div id="incoming-video"></div>
-							<hr />
 			            </div>
 				        <div class="space-10"></div>
 					</div>
@@ -271,7 +273,7 @@
 				</div>
 			</div>
 		</div>
-        <div class="row" ng-show="chat">
+        <div class="row" ng-show="nocall">
             <div ui-view></div>        
         </div>
     </div>
