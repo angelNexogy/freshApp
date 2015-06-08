@@ -10,7 +10,7 @@ var myApp = angular.module('starter',
 myApp.config(function ($stateProvider, $urlRouterProvider) {
 
     // For any unmatched url, redirect to /
-    $urlRouterProvider.otherwise("/home");
+    $urlRouterProvider.otherwise("/");
 
     // Now set up the states
     $stateProvider
@@ -22,7 +22,9 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
             .state('home', {
                 url: "/home",
                 templateUrl: 'templates/home.html',
-                controller: 'HomeController'
+                controller: 'HomeController',
+                // params: {init: true}
+                // defaultParams: {init: true}
             })  
             .state('home.chat', {
                 url: "/chat",
@@ -107,7 +109,7 @@ myApp.run(function ($rootScope, $state, $location, SecurityAuthFactory) {
         }
         else if(SecurityAuthFactory.authObj().$getAuth() && toState.name == 'login'){
             event.preventDefault();
-            $state.go('home');
+            $state.go('home'/*, {init: false}*/);
         }
     });
 });

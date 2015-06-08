@@ -1,6 +1,8 @@
 angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main'])
 
 .controller('AuthController', function($rootScope, $scope, $state, SecurityAuthFactory, KandyManager) {
+
+  $scope.showLoginForm = true;
 	//User login data
 	$scope.loginData = {};
 
@@ -87,6 +89,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
 .controller('HomeController', function($scope, $state, dialogs, SecurityAuthFactory, KandyManager, $interval) {
 
+  $scope.nocall = true;
+
 	$scope.hola = 'logged';
   $scope.login = null;
   $scope.call_id = null;
@@ -98,7 +102,6 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   $scope.oncall = false;
   $scope.dialing = false;
   $scope.event = '';
-  $scope.chat = true;
 
   $scope.logout = function(){
       SecurityAuthFactory.authObj().$unauth();
@@ -133,14 +136,16 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   var onCallInitiate = function(call){
       console.info('call initiate: ' + call.getId());
 
-      $scope.call_id = call.getId();     
-      $audioRingOut[0].play();
+      $scope.call_id = call.getId();          
       $scope.$apply();
   };
 
   var onCallInitiateFail = function(){
       console.error('call initiate failed');
-      $audioRingOut[0].pause();      
+      $audioRingOut[0].pause(); 
+
+      $scope.nocall = true;
+      $scope.$apply();      
   };
 
   var onCall  = function(call){
@@ -156,6 +161,10 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
   var onCallRejected = function(){
     onCallTerminate('call rejected');
+
+    $scope.nocall = true;    
+    $scope.apply();
+    $state.go('home');    
   }
 
   var onCallTerminate  = function(){
@@ -167,6 +176,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $audioRingIn[0].pause(); 
       $scope.dialing = false; 
 
+      $scope.nocall = true; 
       // $scope.$apply();
       $state.go('home');     
   };
@@ -177,6 +187,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $scope.oncall = false; 
     $scope.dialing = false; 
 
+
+    $scope.nocall = true; 
     $scope.$apply();
     $state.go('home');
   }
@@ -186,6 +198,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
       $scope.call_id = call.getId();
 
+      $scope.nocall = false;
       $scope.incoming = true;
       $scope.call_user = call.callerName;
 
@@ -205,9 +218,8 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
   var onCallAnswered = function(){
       console.log('call answered');
       $audioRingIn[0].pause();      
-      // $audioRingOut[0].pause(); 
-      $scope.oncall = true;     
-
+     
+      $scope.oncall = true;
       $scope.$apply();   
   };
 
@@ -216,13 +228,13 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $scope.call_id = null;
     $scope.oncall = false; 
 
+    $scope.nocall = true;
     $scope.$apply();
     $state.go('home');
   }  
 
   var onGetDirectory = function(data){
     console.log(data);
-    // $scope.contacts = [];
 
     data.forEach(function(contact){      
       if(contact.full_user_id != $scope.user.username)          
@@ -234,9 +246,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     KandyManager.watchPresence(data);
 
     $scope.contacts_loader = false;
-    $scope.$apply();   
-
-    // $state.go('app.call');     
+    $scope.$apply();      
   };
 
   var onPresenceNotification = function(username, state, description, activity){
@@ -260,7 +270,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       console.log(data);
     }
     else{
-      console.log('None');
+      // console.log('None');
     }
   }
 
@@ -275,15 +285,16 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
      
       //   },function(){
         
-      // });
-    $scope.chat = false;
+      // }); 
+
+    $scope.nocall = false;
     $scope.incoming = false;
     $scope.call_user = user;
     $state.go('home.call');
   }
 
   $scope.openChat = function(){
-      $scope.chat = true;
+      // $scope.nocall = true;
       $state.go('home.chat'); 
   }
 
@@ -305,8 +316,10 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     // $scope.call = data.call || null;    
 
     $scope.event =  $scope.incoming ? 'Receiving Call...' : '';
+    $scope.answering = false;
 
     $scope.init_call = function(){
+      $audioRingOut[0].play();      
       $scope.dialing = true;      
       KandyManager.makeCall( $scope.call_user.full_user_id, true );//'simplelogin40@development.nexogy.com', false);
     };
@@ -323,11 +336,11 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
 
     $scope.answer_call = function(){
       console.log($scope.call_id)
+      $scope.answering = true;
       KandyManager.answerCall($scope.call_id, true);
     };
 
     $scope.reject_call = function(){
-
       KandyManager.rejectCall($scope.call_id);
     };
 })
