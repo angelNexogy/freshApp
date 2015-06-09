@@ -199,6 +199,7 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       $scope.call_id = call.getId();
 
       $scope.nocall = false;
+      $scope.chat = false;
       $scope.incoming = true;
       $scope.call_user = call.callerName;
 
@@ -293,9 +294,10 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $state.go('home.call');
   }
 
-  $scope.openChat = function(){
-      // $scope.nocall = true;
-      $state.go('home.chat'); 
+  $scope.openChat = function(contact){
+      $scope.contactChat = contact;
+      $scope.chat = true;
+      $state.go('home.chat', {user: contact.full_user_id});
   }
 
 
@@ -344,46 +346,61 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       KandyManager.rejectCall($scope.call_id);
     };
 })
-.controller('ChatController', function($scope, KandyManager, $firebaseArray, SecurityAuthFactory) {
+.controller('ChatController', function($scope, KandyManager, $firebaseArray, SecurityAuthFactory, $stateParams) {
+ 
+  SecurityAuthFactory.getUserAuth().then(function(user){
+     
+    $scope.newMessaje = "";
 
-  $scope.userChat = 'simplelogin42@development.nexogy.com';
+    $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + user.kandy.user_id + '/' + $scope.contactChat.user_id));
 
-  $scope.newMessaje = 'Mensaje de Prueba';
+    var receiverPath = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + $scope.contactChat.user_id + '/' + user.kandy.user_id));
 
-  $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin40/' + 'simplelogin42/'));
+    console.log($scope.contactChat);
 
-  $scope.sendNewMessage = function(){
-    KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(m){
+    $scope.sendNewMessage = function(){
 
-      var message = {
-        id: m.UUID,
-        type: m.contentType,
-        text: m.message.text
-      };
+    KandyManager.sendIM($scope.contactChat.full_user_id, $scope.newMessaje, 'text', function(m){
 
-      console.log(message);
+        var message = {
+          id: m.UUID,
+          type: m.contentType,
+          text: m.message.text,
+          read: false,
+          user_id: user.kandy.user_id,
+          full_name: user.first_name + ' ' + user.last_name,
+        };
 
-      $scope.messages.$add(message);
+        console.log(message);
 
-      console.log('Message Success');
-      console.log(m);
+        //Register message in sender path
+        $scope.messages.$add(message).then(function(ref) {
+          $scope.newMessaje = "";
+        });
 
-    }, function(e){
-      console.log('Message Error. ' +  e);
+        receiverPath.$add(message);
+
+        //Register message in receiver path
+
+        console.log('Message Success');
+        console.log(m);
+
+      }, function(e){
+        console.log('Message Error. ' +  e);
+      });
+    }
+
+    $scope.messages.$loaded()
+        .then(function(data) {
+          console.log(data);
+          $scope.messages = data; // true
+    })
+    .catch(function(error) {
+      console.log("Error:", error);
     });
-  }
 
-  $scope.messages.$loaded()
-      .then(function(data) {
-        console.log(data);
-        $scope.messages = data; // true
-  })
-  .catch(function(error) {
-    console.log("Error:", error);
+    $scope.messages.$watch(function() {
+        console.log("data changed!");
+    });
   });
-
-  $scope.messages.$watch(function() {
-      console.log("data changed!");
-  });
-
 });
