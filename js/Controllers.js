@@ -283,9 +283,11 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
     $state.go('home.call');
   }
 
-  $scope.openChat = function(){
+
+  $scope.openChat = function(contact){
+      $scope.contactChat = contact;
       $scope.chat = true;
-      $state.go('home.chat'); 
+      $state.go('home.chat', {user: contact.full_user_id});
   }
 
 
@@ -332,55 +334,61 @@ angular.module('Controllers', ['Security', 'Kandy', 'ui.bootstrap','dialogs.main
       KandyManager.rejectCall($scope.call_id);
     };
 })
-.controller('ChatController', function($scope, KandyManager, $firebaseArray, SecurityAuthFactory) {
+.controller('ChatController', function($scope, KandyManager, $firebaseArray, SecurityAuthFactory, $stateParams) {
+ 
+  SecurityAuthFactory.getUserAuth().then(function(user){
+     
+    $scope.newMessaje = "";
 
-  $scope.userChat = 'simplelogin42@development.nexogy.com';
+    $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + user.kandy.user_id + '/' + $scope.contactChat.user_id));
 
-  $scope.newMessaje = 'Mensaje de Prueba';
+    var receiverPath = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + $scope.contactChat.user_id + '/' + user.kandy.user_id));
 
-  $scope.messages = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin40/' + 'simplelogin42/'));
+    console.log($scope.contactChat);
 
-  var receiverPath = $firebaseArray(SecurityAuthFactory.managerFB().child('messages/' + 'simplelogin42/' + 'simplelogin40/'));
+    $scope.sendNewMessage = function(){
 
-  $scope.sendNewMessage = function(){
-    KandyManager.sendIM($scope.userChat, $scope.newMessaje, 'text', function(m){
+    KandyManager.sendIM($scope.contactChat.full_user_id, $scope.newMessaje, 'text', function(m){
 
-      var message = {
-        id: m.UUID,
-        type: m.contentType,
-        text: m.message.text,
-        read: false,
-        user: 'simplelogin40'
-      };
+        var message = {
+          id: m.UUID,
+          type: m.contentType,
+          text: m.message.text,
+          read: false,
+          user_id: user.kandy.user_id,
+          full_name: user.first_name + ' ' + user.last_name,
+        };
 
-      console.log(message);
+        console.log(message);
 
-      //Register message in sender path
-      $scope.messages.$add(message);
+        //Register message in sender path
+        $scope.messages.$add(message).then(function(ref) {
+          $scope.newMessaje = "";
+        });
 
-      receiverPath.$add(message);
+        receiverPath.$add(message);
 
-      //Register message in receiver path
+        //Register message in receiver path
 
-      console.log('Message Success');
-      console.log(m);
+        console.log('Message Success');
+        console.log(m);
 
-    }, function(e){
-      console.log('Message Error. ' +  e);
+      }, function(e){
+        console.log('Message Error. ' +  e);
+      });
+    }
+
+    $scope.messages.$loaded()
+        .then(function(data) {
+          console.log(data);
+          $scope.messages = data; // true
+    })
+    .catch(function(error) {
+      console.log("Error:", error);
     });
-  }
 
-  $scope.messages.$loaded()
-      .then(function(data) {
-        console.log(data);
-        $scope.messages = data; // true
-  })
-  .catch(function(error) {
-    console.log("Error:", error);
+    $scope.messages.$watch(function() {
+        console.log("data changed!");
+    });
   });
-
-  $scope.messages.$watch(function() {
-      console.log("data changed!");
-  });
-
 });
