@@ -27,7 +27,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider) {
                 // defaultParams: {init: true}
             })  
             .state('home.chat', {
-                url: "/chat",
+                url: "/chat/:user",
                 templateUrl: 'templates/chat.html',
                 controller: 'ChatController'
             })                

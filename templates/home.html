@@ -237,7 +237,7 @@
                     <li ng-repeat="contact in contacts" style="padding: 10px;">
                         <div class="row">
                             <div class="col-sm-8">
-                                <a ckass="pull-left" style="background-color: transparent;" ng-click="openChat()" href="#">
+                                <a ckass="pull-left" style="background-color: transparent;" ng-click="openChat(contact)">
                                     <i class="fa fa-user" style="font-size: x-large;"></i> 
                                     {{contact.user_first_name}}&nbsp;{{contact.user_last_name}}
                                 </a>
